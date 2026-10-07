@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script>
+      // Defensive shim: Ensure window.fetch has both getter and setter so injected browser extensions
+      // attempting to proxy or monitor fetch do not fail with "Cannot set property fetch of #<Window> which has only a getter"
+      (function() {
+        try {
+          var _f = window.fetch;
+          Object.defineProperty(window, 'fetch', {
+            configurable: true,
+            enumerable: true,
+            get: function() {
+              return _f;
+            },
+            set: function(val) {
+              _f = val;
+            }
+          });
+        } catch (e) {
+          try {
+            if (window.Window && window.Window.prototype) {
+              var _pf = window.Window.prototype.fetch;
+              Object.defineProperty(window.Window.prototype, 'fetch', {
+                configurable: true,
+                enumerable: true,
+                get: function() {
+                  return _pf;
+                },
+                set: function(val) {
+                  _pf = val;
+                }
+              });
+            }
+          } catch (err) {}
+        }
+      })();
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <title>HP Budgeting</title>
+    <meta name="description" content="HP Budgeting - Personal Finance, Spending & Lending Tracker." />
+    <meta property="og:title" content="HP Budgeting" />
+    <meta property="og:description" content="HP Budgeting - Personal Finance, Spending & Lending Tracker." />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+  </head>
+  <body class="bg-black text-white antialiased font-sans selection:bg-zinc-800">
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
